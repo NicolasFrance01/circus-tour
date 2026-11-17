@@ -2,22 +2,31 @@ import NextLink from "next/link";
 import { MapPin, ArrowRight } from "lucide-react";
 
 interface FooterProps {
-  businessName?: string;
-  tagline?: string;
-  description?: string;
+  businessName?: string | null;
+  tagline?: string | null;
+  description?: string | null;
   logoUrl?: string | null;
-  addressCity?: string;
-  mapsUrl?: string;
+  addressCity?: string | null;
+  mapsUrl?: string | null;
 }
 
 export default function Footer({
-  businessName = "Circus Tours",
-  tagline = "Te llevamos y te traemos.",
-  description = "Traslados a eventos y excursiones a la costa desde Buenos Aires y Córdoba. Salidas con punto de encuentro, asiento asignado y pasaje con QR.",
+  businessName,
+  tagline,
+  description,
   logoUrl,
-  addressCity = "Córdoba",
-  mapsUrl = "https://www.google.com/maps/search/?api=1&query=-32.022249%2C-63.969874",
+  addressCity,
+  mapsUrl,
 }: FooterProps) {
+  const displayBusinessName = businessName || "Circus Tours";
+  const displayTagline = tagline || "Te llevamos y te traemos.";
+  const displayDescription =
+    description ||
+    "Traslados a eventos y excursiones a la costa desde Buenos Aires y Córdoba. Salidas con punto de encuentro, asiento asignado y pasaje con QR.";
+  const displayAddressCity = addressCity || "Córdoba";
+  const displayMapsUrl =
+    mapsUrl || "https://www.google.com/maps/search/?api=1&query=-32.022249%2C-63.969874";
+
   return (
     <footer className="relative surface-premium text-white mt-auto">
       {/* Top Accent Gradient Line */}
@@ -29,22 +38,22 @@ export default function Footer({
           {logoUrl ? (
             <img
               src={logoUrl}
-              alt={businessName}
+              alt={displayBusinessName}
               className="h-auto max-h-16 w-auto max-w-[14rem] object-contain object-left"
             />
           ) : (
-            <h3 className="text-2xl font-bold tracking-tight text-white">{businessName}</h3>
+            <h3 className="text-2xl font-bold tracking-tight text-white">{displayBusinessName}</h3>
           )}
-          <p className="text-sm font-semibold text-white/95 leading-relaxed">{tagline}</p>
-          <p className="text-sm leading-relaxed text-slate-400 max-w-xs">{description}</p>
+          <p className="text-sm font-semibold text-white/95 leading-relaxed">{displayTagline}</p>
+          <p className="text-sm leading-relaxed text-slate-400 max-w-xs">{displayDescription}</p>
           <a
-            href={mapsUrl}
+            href={displayMapsUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 text-sm text-slate-300 hover:text-white transition-colors pt-2"
           >
             <MapPin className="w-4 h-4 text-primary shrink-0" />
-            <span>{addressCity}, Argentina</span>
+            <span>{displayAddressCity}, Argentina</span>
           </a>
         </div>
 
@@ -122,7 +131,7 @@ export default function Footer({
       {/* Bottom bar */}
       <div className="border-t border-white/10 py-6 text-center text-xs text-slate-400 px-4">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
-          <span>© {new Date().getFullYear()} {businessName}. Todos los derechos reservados.</span>
+          <span>© {new Date().getFullYear()} {displayBusinessName}. Todos los derechos reservados.</span>
           <div className="flex items-center gap-4">
             <NextLink href="/admin/login" className="hover:text-white transition-colors underline-offset-4 hover:underline">
               Ingreso del equipo

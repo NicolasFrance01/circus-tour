@@ -3,19 +3,21 @@
 import { MessageCircle, Instagram } from "lucide-react";
 
 interface FloatingButtonsProps {
-  whatsapp?: string;
-  instagram?: string;
+  whatsapp?: string | null;
+  instagram?: string | null;
 }
 
 export default function FloatingButtons({
-  whatsapp = "5493516703575",
-  instagram = "circustourscordoba",
+  whatsapp,
+  instagram,
 }: FloatingButtonsProps) {
-  const cleanPhone = whatsapp.replace(/\D/g, "");
+  const finalWhatsapp = whatsapp || "5493516703575";
+  const finalInstagram = instagram || "circustourscordoba";
+  const cleanPhone = finalWhatsapp.replace(/\D/g, "");
   const whatsappUrl = `https://wa.me/${cleanPhone}`;
-  const instagramUrl = instagram.startsWith("http")
-    ? instagram
-    : `https://instagram.com/${instagram.replace("@", "")}`;
+  const instagramUrl = finalInstagram.startsWith("http")
+    ? finalInstagram
+    : `https://instagram.com/${finalInstagram.replace("@", "")}`;
 
   return (
     <div

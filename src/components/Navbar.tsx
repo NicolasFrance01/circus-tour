@@ -7,7 +7,7 @@ import { usePathname } from "next/navigation";
 import { Menu, X, ArrowRight, Compass } from "lucide-react";
 
 interface NavbarProps {
-  businessName?: string;
+  businessName?: string | null;
   logoUrl?: string | null;
   primaryColor?: string;
 }
@@ -17,6 +17,7 @@ export default function Navbar({
   logoUrl,
   primaryColor = "#a83832",
 }: NavbarProps) {
+  const displayBusinessName = businessName || "Circus Tours";
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
 
@@ -37,7 +38,7 @@ export default function Navbar({
             {logoUrl ? (
               <img
                 src={logoUrl}
-                alt={businessName}
+                alt={displayBusinessName}
                 className="h-9 md:h-11 w-auto object-contain"
               />
             ) : (
@@ -49,7 +50,7 @@ export default function Navbar({
                   <Compass className="w-5 h-5" />
                 </div>
                 <span className="font-extrabold text-lg tracking-tight text-slate-900">
-                  {businessName}
+                  {displayBusinessName}
                 </span>
               </div>
             )}

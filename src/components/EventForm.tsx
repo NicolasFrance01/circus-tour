@@ -588,3 +588,4 @@ export default function EventForm({ initialData, isEditing }: EventFormProps) {
     </form>
   );
 }
+

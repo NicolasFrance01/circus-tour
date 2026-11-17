@@ -77,3 +77,4 @@ NEXT_PUBLIC_APP_URL="http://localhost:3000"
    - En la pestaña **Storage** de tu proyecto en Vercel, creá un store de **Blob** y enlazalo al proyecto. Vercel inyectará automáticamente `BLOB_READ_WRITE_TOKEN`.
 4. **Deploy:**
    - El script `npm run build` ejecutará automáticamente `prisma generate` y creará el build optimizado de Next.js.
+

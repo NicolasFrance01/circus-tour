@@ -54,3 +54,4 @@ export async function removeSessionCookie() {
   const cookieStore = await cookies();
   cookieStore.delete(COOKIE_NAME);
 }
+

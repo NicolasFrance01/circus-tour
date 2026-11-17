@@ -489,3 +489,4 @@ export default function BookingForm({ event, businessInfo }: BookingFormProps) {
     </form>
   );
 }
+

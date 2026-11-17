@@ -28,3 +28,4 @@ export default async function EditarEventoPage({
 
   return <EventForm initialData={event} isEditing={true} />;
 }
+

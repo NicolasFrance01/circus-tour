@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { prisma } from "@/lib/prisma";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import FloatingButtons from "@/components/FloatingButtons";
+import PublicLayoutWrapper from "@/components/PublicLayoutWrapper";
 
 export const dynamic = "force-dynamic";
 
@@ -60,24 +58,19 @@ export default async function RootLayout({
         <style dangerouslySetInnerHTML={{ __html: `:root { --tenant-primary: ${primaryColor}; }` }} />
       </head>
       <body className="min-h-screen flex flex-col antialiased bg-white text-slate-900">
-        <Navbar
-          businessName={business?.name || "Circus Tours"}
-          logoUrl={business?.logoUrl}
-          primaryColor={primaryColor}
-        />
-        <main className="flex-1">{children}</main>
-        <Footer
+        <PublicLayoutWrapper
           businessName={business?.name || "Circus Tours"}
           tagline={business?.tagline}
           description={business?.description}
           logoUrl={business?.logoUrl}
           addressCity={business?.addressCity}
           mapsUrl={business?.mapsUrl}
-        />
-        <FloatingButtons
           whatsapp={business?.whatsapp}
           instagram={business?.instagram}
-        />
+          primaryColor={primaryColor}
+        >
+          {children}
+        </PublicLayoutWrapper>
       </body>
     </html>
   );

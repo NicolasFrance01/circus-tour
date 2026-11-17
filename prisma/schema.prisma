@@ -1,0 +1,119 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model BusinessSettings {
+  id              String   @id @default("default")
+  name            String   @default("Circus Tours")
+  slug            String   @default("circus-tours")
+  tagline         String   @default("Te llevamos y te traemos.")
+  description     String   @default("Salimos desde Córdoba y Villa María a los recitales más grandes del país, en cama o semicama, con cena previa y coordinación todo el viaje. Reservás online y viajás seguro con tu pasaje QR.")
+  logoUrl         String?
+  heroImage       String   @default("https://images.unsplash.com/photo-1540039155733-5bb30b53aa14?auto=format&fit=crop&w=2000&q=80")
+  heroTitle       String   @default("Viajá a los mejores recitales y eventos")
+  heroSubtitle    String   @default("Traslados grupales en micros de larga distancia con cena previa, coordinación permanente y pasaje digital con QR.")
+  phone           String   @default("5493516703575")
+  whatsapp        String   @default("5493516703575")
+  instagram       String   @default("circustourscordoba")
+  addressCity     String   @default("Córdoba")
+  addressCountry  String   @default("AR")
+  mapsUrl         String   @default("https://www.google.com/maps/search/?api=1&query=-32.022249%2C-63.969874")
+  primaryColor    String   @default("#a83832")
+  navStyle        String   @default("flotante")
+  bankCbu         String?
+  bankAlias       String?
+  bankHolder      String?
+  updatedAt       DateTime @updatedAt
+}
+
+model AdminUser {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  name         String
+  role         String   @default("ADMIN") // ADMIN, COORDINATOR
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Event {
+  id                 String         @id @default(cuid())
+  slug               String         @unique
+  title              String
+  subtitle           String?
+  description        String         @db.Text
+  imageUrl           String
+  categoryTag        String         @default("Recitales")
+  type               String         @default("EVENTO") // EVENTO, TURISMO
+  date               DateTime
+  returnDate         DateTime?
+  departureTime      String         @default("17:30")
+  departureLocation  String         @default("Terminal de Córdoba")
+  venue              String?
+  city               String         @default("Córdoba")
+  destinationCity    String         @default("Buenos Aires")
+  price              Decimal        @db.Decimal(12, 2)
+  depositPrice       Decimal?       @db.Decimal(12, 2)
+  totalCapacity      Int            @default(50)
+  isFeatured         Boolean        @default(false)
+  isActive           Boolean        @default(true)
+  busType            String         @default("Cama / Semicama")
+  includes           String         @default("[\"Traslado ida y vuelta\", \"Cena previa\", \"Coordinación permanente\", \"Desayuno al regreso\"]") @db.Text
+  itinerary          String?        @db.Text
+  createdAt          DateTime       @default(now())
+  updatedAt          DateTime       @updatedAt
+  pickupPoints       PickupPoint[]
+  reservations       Reservation[]
+}
+
+model PickupPoint {
+  id           String        @id @default(cuid())
+  eventId      String
+  event        Event         @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  name         String
+  address      String?
+  time         String        @default("17:30")
+  extraPrice   Decimal       @default(0.00) @db.Decimal(10, 2)
+  order        Int           @default(0)
+  reservations Reservation[]
+}
+
+model Reservation {
+  id             String       @id @default(cuid())
+  ticketCode     String       @unique // e.g. CT-8291
+  eventId        String
+  event          Event        @relation(fields: [eventId], references: [id])
+  pickupPointId  String?
+  pickupPoint    PickupPoint? @relation(fields: [pickupPointId], references: [id])
+  customerName   String
+  customerDni    String
+  customerEmail  String
+  customerPhone  String
+  seatsCount     Int          @default(1)
+  seatType       String       @default("Semicama") // Semicama, Cama
+  assignedSeats  String?
+  totalPrice     Decimal      @db.Decimal(12, 2)
+  paidAmount     Decimal      @default(0.00) @db.Decimal(12, 2)
+  paymentMethod  String       @default("TRANSFERENCIA") // TRANSFERENCIA, MERCADOPAGO, EFECTIVO
+  paymentStatus  String       @default("PENDIENTE") // PENDIENTE, PARCIAL, PAGADO, CANCELADO
+  notes          String?      @db.Text
+  status         String       @default("ACTIVA") // ACTIVA, CANCELADA, COMPLETADA
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+}
+
+model Testimonial {
+  id           String   @id @default(cuid())
+  text         String   @db.Text
+  authorName   String
+  authorOrigin String   @default("Córdoba")
+  rating       Int      @default(5)
+  isActive     Boolean  @default(true)
+  order        Int      @default(0)
+  createdAt    DateTime @default(now())
+}
